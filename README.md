@@ -2,7 +2,7 @@
 
 Dieses Skript stellt den Lisp-Dialekt *Scheme* einführend vor und vermittelt einige grundlegende Konzepte der funktionalen Programmierung anhand von Beispielen.
 
-Eine HTML-Version des Skripts ist [hier](https://feberts.github.io/lisp/) verfügbar.
+Eine HTML-Version des Skripts ist [hier](https://feberts.github.io/Lisp-Tutorial/) verfügbar.
 
 ### Inhaltsverzeichnis
 
