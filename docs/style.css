@@ -1,0 +1,207 @@
+body
+{
+    counter-reset: section
+}
+
+h1
+{
+    counter-reset: sub-section
+}
+
+h1:before
+{
+    counter-increment: section;
+    content: counter(section) ". ";
+}
+
+h2:before
+{
+    counter-increment: sub-section;
+    content: counter(section) "." counter(sub-section) ". ";
+}
+
+body
+{
+    font-family: sans-serif;
+    background: rgb(238, 238, 238);
+}
+
+.content
+{
+    text-align: justify;
+    margin-top: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    padding-top: 1px;
+    width: 90%;
+    max-width: 750pt;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 0px 0px 15px 0px lightgrey;
+}
+
+#title
+{
+    font-weight: bold;
+    font-size: 2em;
+    font-variant: small-caps;
+    margin-top: 25px;
+    text-align: center;
+    background: rgb(0, 70, 102);
+    padding: 10px;
+    border-radius: 3px;
+    color: white;
+    box-shadow: 5px 5px 7px 0px lightgray;
+}
+
+#author
+{
+    font-size: 1.25em;
+    text-align: center;
+}
+
+#date
+{
+    text-align: center;
+    margin-bottom: 20pt;
+}
+
+#toc
+{
+    font-size: 1.5em;
+}
+
+h1
+{
+    border-radius: 3px;
+    padding: 10px;
+    padding-left: 15px;
+    box-shadow: 5px 5px 7px 0px lightgray;
+    color: white;
+    background: rgb(0, 70, 102);
+}
+
+pre
+{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(207, 207, 207);
+    border-radius: 5px;
+    font-family: "Courier New", monospace;
+    overflow-x: auto;
+    background: rgb(247, 247, 247);
+    color: black;
+    padding: 10px;
+    padding-left: 15px;
+    /* box-shadow: 5px 5px 5px 0px lightgray; */
+}
+
+code
+{
+    font-family: "Courier New", monospace;
+    color: darkred;
+}
+
+.keyword
+{
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    color: black;
+}
+
+.keywordinline
+{
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    color: darkred;
+}
+
+.comment
+{
+    font-family: "Courier New", monospace;
+    color: grey;
+    font-style: italic;
+}
+
+.codenumbers
+{
+    font-family: "Courier New", monospace;
+    font-size: 0.8em;
+    color: darkgreen;
+    padding-right: 15px;
+}
+
+.prompt
+{
+    font-family: "Courier New", monospace;
+    color: darkgreen;
+}
+
+.shellprompt
+{
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    color: black;
+}
+
+.image
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width:95%
+}
+
+.syntaxbox
+{
+    margin-left: 2em;
+    color: darkgreen;
+    font-style: italic;
+}
+
+.syntaxinline
+{
+    color: darkgreen;
+    font-style: italic;
+}
+
+.caption
+{
+    text-align: center;
+}
+
+.row
+{
+    display: flex;
+}
+
+.column
+{
+    flex: 25%;
+    padding: 0px;
+}
+
+.mathblock
+{
+    margin-left: 2em;
+}
+
+dt
+{
+    float: left;
+}
+
+dd
+{
+    margin-left: 7em;
+    padding-bottom: 0.5em;
+}
+
+.par { }
+.emph { }
+.textit { }
+.textbf { }
+.sec { }
+.subsec { }
+.subsecnonumber { }

@@ -1,0 +1,647 @@
+<!-- auto-generated html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Lisp-Tutorial</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./img/lambda.svg">
+</head>
+<body>
+<div class="content">
+    <p id="title">Einführung in die funktionale<br> Programmierung mit Lisp</p>
+    <p id="author">Fabian Eberts</p>
+    <p id="date">23. Oktober 2020</p>
+    <p>Dieses Tutorial stellt den Lisp-Dialekt <em>Scheme</em> einführend vor und vermittelt einige grundlegende Konzepte der funktionalen Programmierung.</p>
+    <p>Eine PDF-Version ist
+    <a href="https://github.com/feberts/Lisp-Tutorial">hier</a>
+    verfügbar. Diese Website wurde automatisch aus den LaTeX-Quelldateien generiert.</p>
+    <p id="toc"><b>Inhaltsverzeichnis</b></p>
+    <ol>
+        <li><b>Einleitung</b></li>
+        <li><b>Die Sprache Scheme</b><ol>
+            <li>Scheme – ein Lisp-Dialekt</li>
+            <li>Literatur</li>
+            <li>Installation der Entwicklungsumgebung</li></ol></li>
+        <li><b>Einführung in Scheme</b><ol>
+            <li>Geklammerte Präfixnotation</li>
+            <li>Arithmetische Ausdrücke</li>
+            <li>Zeichenketten</li>
+            <li>Funktionen und Lambda-Kalkül</li>
+            <li>Kontrollstrukturen</li>
+            <li>Listen und Paare</li>
+            <li>Mapping</li>
+            <li>Folding</li></ol></li>
+        <li><b>Bilderzeugung</b><ol>
+            <li>Funktionsgraphen</li>
+            <li>Geometrische Objekte</li>
+            <li>Fraktale</li></ol></li>
+        <li><b>Zusammenfassung</b></li>
+        <li><b>Literaturverzeichnis</b></li>
+    </ol>
+</div>
+<div class="content">
+<p>
+</p><p class="par">
+</p><h1 class="sec">Einleitung</h1><p>
+</p><p class="par">
+Dieses Skript stellt den Lisp-Dialekt <em class="emph">Scheme</em> einführend vor. Dabei ist es von Vorteil, wenn der Leser bereits über Erfahrungen in der funktionalen Programmierung verfügt und mit den wichtigsten Konzepten vertraut ist. Diese werden nur dann (kurz) erläutert, wenn dies sinnvoll erscheint oder es sich um Scheme-spezifische Besonderheiten handelt. Diese Einführung eignet sich also insbesondere für diejenigen, die eine weitere funktionale Sprache kennenlernen möchten. Aber auch Neulingen kann dieser Schnelleinstieg nützlich sein. Hier ist allerdings die Hinzunahme weiterführender Literatur ratsam. Entsprechende Empfehlungen werden in Abschnitt&nbsp;2.2 ausgesprochen.
+</p><p class="par">
+</p><h2 class="subsecnonumber">Motivation</h2><p>
+</p><p class="par">
+Neben Lisp gibt es noch eine Menge anderer funktionaler Sprachen. Die Erfahrung zeigt, dass das Erlernen einer weiteren Sprache desselben Programmierparadigmas meist weniger Aufwand erfordert, weil man die wesentlichen Konzepte bereits verinnerlicht hat. So fällt beispielsweise der Einstieg in Java nicht schwer, wenn man zuvor schon mit C++ programmiert hat. Häufig lernt man auf diese Weise erst die Stärken und Schwächen bestimmter Sprachen kennen. Der „Blick über den Tellerrand“ lohnt sich allemal.
+</p><p class="par">
+</p><h2 class="subsecnonumber">Ziele</h2><p>
+</p><p class="par">
+Wir werden die Sprache Scheme genauer kennenlernen. Nach dem Durcharbeiten dieses Skripts werden wir in der Lage sein, kleine Programme selbst zu schreiben. Außerdem werden wir uns so weit an die Syntax gewöhnt haben, dass uns das selbstständige Erlernen weiterer Sprachelemente nicht schwerfallen wird.
+</p><p class="par">
+</p><h2 class="subsecnonumber">Aufbau</h2><p>
+</p><p class="par">
+In Kapitel 2 verschaffen wir uns zunächst einen kleinen Überblick über die Sprache Scheme und installieren einen Interpreter. Die Einführung in die Programmierung erfolgt dann in Kapitel 3. Zu guter Letzt werden wir uns in Kapitel 4 noch ein wenig Spaß gönnen und uns mit einer Grafikbibliothek beschäftigen, mit deren Hilfe wir Funktionsgraphen plotten und Fraktale erzeugen werden.
+</p><p class="par">
+</p><h1 class="sec">Die Sprache Scheme</h1><p>
+</p><p class="par">
+In diesem Kapitel versuchen wir, Scheme in der Landschaft der vielen Lisp-Dialekte zu verorten. Dann wird die Literatur vorgestellt, welche für dieses Skript herangezogen wurde und auch darüber hinaus genutzt werden kann, um Scheme weiter zu erlernen. Anschließend machen wir uns mit der Entwicklungsumgebung <em class="emph">DrRacket</em> vertraut.
+</p><p class="par">
+</p><h2 class="subsec">Scheme – ein Lisp-Dialekt</h2><p>
+</p><p class="par">
+Scheme entstand 1975 als Lisp-Dialekt. Obwohl Scheme eine funktionale Sprache ist, unterstützt sie auch andere Programmierparadigmen. Aufgrund ihrer einfachen Syntax wird sie gerne in der Lehre eingesetzt. Trotz des minimalistischen Designs ist Scheme eine ausdrucksstarke Sprache und ermöglicht das Schreiben von Programmen hoher Komplexität. Der Kern der Sprache besteht aus wenigen grundlegenden Konstrukten, aus welchen sich die gesamte Sprache herleiten lässt. Das erklärt nicht nur ihre Flexibilität, sondern auch die große Anzahl verschiedener Dialekte. Heute ist Scheme eine Allzweck-Programmiersprache und kommt in der Forschung und Softwareentwicklung zum Einsatz [Dyb09, <em class="textit">Preface</em> und <em class="textit">1. Introduction</em>]. Laut Tiobe-Index sind Scheme und Haskell in ihrer Popularität etwa gleichauf. Erst deutlich danach kommt Common Lisp. Racket taucht im Index (noch) gar nicht auf [Tio20]. Die derzeit aktuellste Spezifikation von Scheme ist der R7RS (<em class="textit"><b class="textbf">R</b>evised7 <b class="textbf">R</b>eport on the Algorithmic Language <b class="textbf">S</b>cheme</em>) aus dem Jahr&nbsp;2013&nbsp;[SCG13]. 
+</p><p class="par">
+</p><h2 class="subsec">Literatur</h2><p>
+</p><p class="par">
+Im Folgenden sind einige Quellen sowie weiterführende Literatur aufgeführt:
+</p><p class="par">
+</p><ul><li>
+
+Als Hauptquelle für dieses Skript – insbesondere für Kapitel 3 – dient <em class="emph">The Scheme Programming Language</em> [Dyb09]. Es handelt sich dabei um ein sehr beliebtes Lehrwerk für die Sprache Scheme. Das Buch enthält viele Übungsaufgaben und ist als Onlineversion verfügbar.
+</li><li>
+Ein anderes Standardwerk ist <em class="emph">Structure and Interpretation of Computer Programs</em> [ASS96]. Dabei geht es in erster Linie um das Erlernen grundlegender und fortgeschrittener Konzepte der Programmierung im Allgemeinen. Dabei wird Scheme verwendet, um die verschiedenen Themen anhand praktischer Beispiele zu erklären. Das Buch eignet sich eher als weiterführende Lektüre, nachdem man bereits Grundkenntnisse in Scheme erlangt hat. Es liegt eine Onlineversion vor.
+</li><li>
+Empfehlenswert ist außerdem <em class="emph">The Little Schemer</em> [FF95]. Man könnte das Buch als eine eher unkonventionelle Einführung in Scheme beschreiben. Ein Schwerpunkt ist die rekursive Programmierung. Das Buch ist nicht frei im Internet verfügbar.
+</li></ul><p>
+</p><p class="par">
+</p><h2 class="subsec">Installation der Entwicklungsumgebung</h2><p>
+</p><p class="par">
+Eine bequeme Möglichkeit, erste Erfahrungen mit Scheme zu sammeln, bietet die Entwicklungsumgebung <em class="emph">DrRacket</em>, welche zusammen mit der Racket-Plattform installiert werden kann. Zwar dient diese primär zum Programmieren mit <em class="emph">Racket</em> (einem weiteren Dialekt von Lisp, welcher auf Scheme basiert), doch kann dort auch reiner Scheme-Code ausgeführt werden.
+</p><p class="par">
+Auf der Website (<a href="https://racket-lang.org/">https://racket-lang.org/</a>) wird ein Installer für gängige Linux-Distributionen angeboten. Nach dem Herunterladen wird die Plattform wie folgt installiert:
+</p><p class="par">
+</p><pre>
+<code class="shellprompt">user@linux:~$</code> ls -l racket-7.7-x86_64-linux.sh 
+-rwxrwxr-x 1 user user 123001690 Jun 24 20:51 racket-7.7-x86_64-linux.sh
+<code class="shellprompt">user@linux:~$</code> chmod +x racket-7.7-x86_64-linux.sh 
+<code class="shellprompt">user@linux:~$</code> ./racket-7.7-x86_64-linux.sh 
+</pre><p>
+</p><p class="par">
+Während der Installation werden verschiedene Optionen angeboten. Zum Experimentieren mit Scheme ist es dabei am praktischsten, die Plattform in ein eigenes Verzeichnis zu installieren. Anschließend wird DrRacket mit <code>./racket/bin/drracket</code> gestartet.
+</p><p class="par">
+Die Umgebung ist in zwei Fenster unterteilt. Im oberen Fenster muss die zu verwendende Sprache eingegeben werden (hier <code>#lang scheme</code>) und dann der <em class="textit">Start</em>-Button gedrückt werden. Das untere Fenster ist der Interpreter, in welchem einzelne Befehle, aber auch ganze Programme ausgeführt werden können:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> "Hallo Scheme"
+"Hallo Scheme"
+<code class="prompt">></code> (* 6 7)
+42
+</pre><p>
+</p><p class="par">
+Ausgeführt wird ein Befehl mit der &#8617;-Taste, sofern sich der Cursor am Zeilenende befindet. Tut er das nicht, drückt man stattdessen Strg+&#8617;. Ansonsten wird ein Zeilenumbruch eingefügt, denn es können auch mehrzeilige Befehle eingegeben werden. Durch die Historie kann man sich mit Strg+&#8679; und Strg+&#8681; bewegen.
+</p><p class="par">
+</p><p class="par">
+Im nächsten Kapitel lernen wir Scheme kennen. Alle dort gezeigten Beispiele wurden im DrRacket-Interpreter getestet.
+</p><p class="par">
+</p><h1 class="sec">Einführung in Scheme</h1><p>
+</p><p class="par">
+Jetzt geht es endlich los. In diesem Kapitel erlernen wir die Grundlagen der Programmierung mit Scheme.
+</p><p class="par">
+</p><h2 class="subsec">Geklammerte Präfixnotation</h2><p>
+</p><p class="par">
+Beim Betrachten von Scheme-Code fallen zuerst die vielen runden Klammern auf. Jeder Ausdruck wird grundsätzlich geklammert. Ein Zeichen zum Terminieren eines Ausdrucks entfällt somit. Für Funktionen und Operatoren wird stets die <em class="emph">Präfixnotation</em> verwendet. Die Möglichkeit, binäre Operatoren oder Funktionen in Infixnotation zu schreiben – wie es in Haskell möglich ist – besteht nicht. Zeilen- und Zeilenendkommentare werden durch ein Semikolon eingeleitet:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (+ 1 2 3) <code class="comment">; Addition</code>
+6
+<code class="prompt">></code> (+ 1 (/ 4 2) 3) <code class="comment">; geschachtelter Ausdruck</code>
+6
+</pre><p>
+</p><p class="par">
+Inline- und Blockkommentare werden mit <code>#|</code> und <code>|#</code> umschlossen:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (+ 1 <code class="comment">#| nicht 2 |#</code> 3)
+4
+<code class="prompt">></code> (+ 1 <code class="comment">#| (/ 4 2) |#</code> 3)
+4
+</pre><p>
+</p><p class="par">
+Innenliegende Ausdrücke oder Werte können zudem durch ein vorangestelltes <code>#;</code> auskommentiert werden:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (+ 1 <code class="comment">#; 2</code> 3)
+4
+<code class="prompt">></code> (+ 1 <code class="comment">#; (/ 1 2)</code> 3)
+4
+</pre><p>
+</p><p class="par">
+Seit der Einführung des R7RS-Standards stehen außerdem eckige Klammern zur Verfügung. Diese können dazu genutzt werden, um die Lesbarkeit von Ausdrücken zu verbessern. Eine häufig anzutreffende Konvention ist, eckige Klammern nur bei bestimmten Ausdrücken wie <code>cond</code> einzusetzen. Runde und eckige Klammern sind dabei vollkommen gleichwertig. Eine öffnende Klammer muss jedoch mit derselben Klammerart wieder geschlossen werden.
+</p><p class="par">
+</p><h2 class="subsec">Arithmetische Ausdrücke</h2><p>
+</p><p class="par">
+Scheme kennt eine Vielzahl verschiedener Darstellungen für Zahlen. Es steht außerdem eine Unmenge von Rechenoperationen zur Verfügung, die wir hier aber nicht in ihrer Vollständigkeit behandeln werden:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (+ 3 -2 0.7)
+1.7
+<code class="prompt">></code> (<code class="keyword">expt</code> 3 2) <code class="comment">; Exponentiation</code>
+9
+<code class="prompt">></code> (<code class="keyword">sqrt</code> 9)
+3
+<code class="prompt">></code> (<code class="keyword">modulo</code> 10 4)
+2
+</pre><p>
+</p><p class="par">
+Es stehen die üblichen arithmetischen Operatoren <code>+</code>, <code>-</code>, <code>*</code>, und <code>/</code> zur Verfügung. Reelle Zahlen können zudem in wissenschaftlicher Notation angegeben werden:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (* 567 1e-2)
+5.67
+</pre><p>
+</p><p class="par">
+Auch mit komplexen Zahlen können wir rechnen:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">sqrt</code> -1)
+0+1i
+<code class="prompt">></code> (<code class="keyword">expt</code> -i 2)
+-1
+<code class="prompt">></code> (+ 3+2i 5+5i)
+8+7i
+</pre><p>
+</p><p class="par">
+Rationale Zahlen können wir in der Form <code>a/b</code> angeben. Dabei ist <code>/</code> kein Operator, sondern Teil der Notation:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (- 2 4/3)
+2/3
+</pre><p>
+</p><p class="par">
+Scheme kennt und erkennt bei Berechnungen sowohl <em class="emph">beliebige Genauigkeit</em> als auch die ungenaue Darstellung von Ergebnissen. Mit <code>exact?</code> können wir herausfinden, ob ein Ergebnis exakt ist oder nicht:
+</p><p class="par">
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (/ 1 3)
+1/3
+<code class="prompt">></code> (<code class="keyword">exact?</code> (/ 1 3))
+#t
+<code class="prompt">></code> (/ 1 2.9)
+0.3448275862068966
+<code class="prompt">></code> (<code class="keyword">exact?</code> (/ 1 2.9))
+#f
+</pre><p>
+</p><p class="par">
+Wahrheitswerte werden in Scheme durch <code>#t</code> und <code>#f</code> repräsentiert. Dabei steht <code>#f</code> für einen als „falsch“ ausgewerteten Ausdruck. Alle anderen Ausdrücke gelten als „wahr“:
+</p><p class="par">
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">not</code> #t)
+#f
+<code class="prompt">></code> (<code class="keyword">not</code> #f)
+#t
+<code class="prompt">></code> (<code class="keyword">not</code> "false")
+#f
+</pre><p>
+</p><p class="par">
+Zum Vergleichen von Zahlen können wir die bekannten Operatoren nutzen:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (= 7 3)
+#f
+<code class="prompt">></code> (> 7 3)
+#t
+<code class="prompt">></code> (&lt;&equals; 7 3)
+#f
+<code class="prompt">></code> (<code class="keyword">not</code> (= 7 3))
+#t
+</pre><p>
+</p><p class="par">
+</p><h2 class="subsec">Zeichenketten</h2><p>
+</p><p class="par">
+Zeichenketten (Strings) werden mit doppelten Anführungszeichen umschlossen. Einzelzeichen (Characters) können wir durch <code>#\</code> gefolgt von einem Zeichen angeben:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> "Mueller-Luedenscheidt"
+"Mueller-Luedenscheidt"
+<code class="prompt">></code> #\c <code class="comment">; Character 'c'</code>
+#\c
+</pre><p>
+</p><p class="par">
+Ein Character wie <code>#\c</code> ist dabei <em class="emph">kein</em> String. Umgekehrt ist der String <code>"s"</code> <em class="emph">kein</em> Character:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">string?</code> "s")
+#t
+<code class="prompt">></code> (<code class="keyword">string?</code> #\c)
+#f
+<code class="prompt">></code> (<code class="keyword">char?</code> #\c)
+#t
+<code class="prompt">></code> (<code class="keyword">char?</code> "s")
+#f
+</pre><p>
+</p><p class="par">
+Es stehen viele Funktionen zum Arbeiten mit Zeichenketten bereit. So können zwei Strings mit <code>(<code class="keywordinline">string=?</code> "abc" "def")</code> auf Gleichheit überprüft werden. Mit <code>string-append</code> werden Strings konkateniert:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">string-append</code> "Do" "lorem ipsum")
+"Dolorem ipsum"
+</pre><p>
+</p><p class="par">
+</p><h2 class="subsec">Funktionen und Lambda-Kalkül</h2><p>
+</p><p class="par">
+Mit <code>define</code> kann ein Ausdruck an einen Bezeichner gebunden werden. Im einfachsten Fall hat eine solche Anweisung die Form <em class="syntaxinline">(<b class="textbf">define</b> Bezeichner Ausdruck)</em>. Damit sind bereits Definitionen von Variablen und parameterlosen Funktionen möglich:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> wert 7)
+<code class="prompt">></code> (<code class="keyword">define</code> antwort (* 6 wert))
+<code class="prompt">></code> antwort
+42
+</pre><p>
+</p><p class="par">
+Die allgemeine Syntax lautet:
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">define</b> (Bezeichner Arg<sub>1</sub> ... Arg<sub>n</sub>) Ausdruck<sub>1</sub> ... Ausdruck<sub>n</sub>)</p><p>
+</p><p class="par">
+Eine Funktion zum Addieren zweier Zahlen könnten wir so implementieren:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> (addiere x y) (+ x y))
+  (addiere 3 4)
+7
+</pre><p>
+</p><p class="par">
+Die Ausdrücke einer Definition werden der Reihe nach ausgewertet. Erst das Ergebnis des letzten Ausdrucks bildet dann den Rückgabewert der Funktion:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> (addiereUndQuadriere x y)
+      (<code class="keyword">define</code> summe (+ x y))
+      (<code class="keyword">expt</code> summe 2))
+  (addiereUndQuadriere 3 4)
+49
+</pre><p>
+</p><p class="par">
+Natürlich implementiert Scheme auch den <em class="emph">Lambda-Kalkül</em>. Die Syntax ähnelt der von Funktionsdefinitionen, wobei der Bezeichner entfällt:
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">lambda</b> (Arg<sub>1</sub> ... Arg<sub>n</sub>) Ausdruck<sub>1</sub> ... Ausdruck<sub>n</sub>)</p><p>
+</p><p class="par">
+Das Quadrieren einer Zahl können wir dann als anonyme Lambda-Funktion umsetzen:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> ((<code class="keyword">lambda</code> (x) (<code class="keyword">expt</code> x 2)) 7)
+49
+</pre><p>
+</p><p class="par">
+Unsere Funktion <code>addiereUndQuadriere</code> könnten wir dann beispielsweise umschreiben zu:
+</p><p class="par">
+</p><pre>
+(<code class="keyword">define</code> (addiereUndQuadriere x y)
+    (<code class="keyword">define</code> summe (+ x y))
+    ((<code class="keyword">lambda</code> (x) (<code class="keyword">expt</code> x 2)) summe))
+</pre><p>
+</p><p class="par">
+</p><h2 class="subsec">Kontrollstrukturen</h2><p>
+</p><p class="par">
+Verzweigungen können mit <code>if</code> oder <code>cond</code> realisiert werden. Ersteres funktioniert denkbar einfach:
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">if</b> Bedingung Aktion Sonst)</p><p>
+</p><p class="par">
+Trifft die Bedingung zu, wird die Aktion ausgeführt, ansonsten der darauffolgende Ausdruck. Damit können wir beispielsweise eine Betragsfunktion schreiben:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> (betrag x) (<code class="keyword">if</code> (>= x 0) x (* -1 x)))
+<code class="prompt">></code> (betrag 3)
+3
+<code class="prompt">></code> (betrag -1)
+1
+</pre><p>
+</p><p class="par">
+Eine else-if-Anweisung, wie wir sie aus anderen Sprachen kennen, steht in Scheme nicht zur Verfügung. Um eine if-elseif-Konstruktion zu erreichen, könnte man <code>if</code>-Anweisungen mehrfach schachteln. Weil das schnell unübersichtlich wird, gibt es die <code>cond</code>-Anweisung:
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">cond</b> Klausel<sub>1</sub> ... Klausel<sub>n</sub>)</p><p>
+</p><p class="par">
+Eine Klausel hat immer die Form <em class="syntaxinline">(Bedingung Ausdruck<sub>1</sub> ... Ausdruck<sub>n</sub>)</em>. Die letzte Klausel kann alternativ eine <code>else</code>-Anweisung statt einer Bedingung enthalten: <em class="syntaxinline">(<b class="textbf">else</b> Ausdruck<sub>1</sub> ... Ausdruck<sub>n</sub>)</em>. Nun definieren wir eine Funktion, die zwei Werte vergleicht und eine entsprechende Ausgabe erzeugt:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> (vergleiche x y)
+      (<code class="keyword">cond</code> [(> x y) "groesser"]
+            [(&lt; x y) "kleiner"]
+            [<code class="keyword">else</code> "gleich"]))
+<code class="prompt">></code> (vergleiche 7 3)
+"groesser"
+</pre><p>
+</p><p class="par">
+Es ist üblich, die Klauseln in eckige statt runde Klammern einzufassen. Das verbessert die Lesbarkeit.
+</p><p class="par">
+</p><h2 class="subsec">Listen und Paare</h2><p>
+</p><p class="par">
+Der einfachste Weg, eine <em class="emph">Liste</em> zu erzeugen, ist, die Listenelemente zwischen runden Klammern aufzuzählen. Der Versuch, durch <code>(abc d e f)</code> eine Liste zu definieren, führt jedoch zu einer Fehlermeldung des Interpreters. Das semantische Problem liegt darin, dass nicht klar ist, ob es sich bei <code>abc</code> um einen Funktionsaufruf oder um das erste Listenelement handeln soll. Abhilfe verschafft das <code>quote</code>-Schlüsselwort. Üblicherweise wird jedoch <code>'(</code> als alternative Schreibweise verwendet. Beide Varianten sind gleichwertig:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">quote</code> (abc d e f))
+(abc d e f)
+<code class="prompt">></code> '(abc d e f)
+(abc d e f)
+</pre><p>
+</p><p class="par">
+Listen lassen sich aber auch mit <code>list</code> erzeugen. Dabei handelt es sich – im Gegensatz zu <code>quote</code> – um eine Funktion. Daher werden die Argumente <em class="emph">vorher</em> ausgewertet. Bei <code>quote</code> ist das <em class="emph">nicht</em> der Fall, denn <code>quote</code> ist keine Funktion, sondern ein Sprachelement von Scheme:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">list</code> 1 (+ 1 1) (+ 1 2)) <code class="comment">; Ausdruecke werden ausgewertet</code>
+(1 2 3)
+<code class="prompt">></code> '(1 (+ 1 1) (+ 1 2))     <code class="comment">; Ausdruecke werden NICHT ausgewertet</code>
+(1 (+ 1 1) (+ 1 2))
+</pre><p>
+</p><p class="par">
+Die <em class="emph">leere Liste</em> wird durch <code>()</code> repräsentiert und mit <code>'()</code> in einem Ausdruck verwendet. Mit <code>car</code> wird das erste Listenelement zurückgegeben und mit <code>cdr</code> der Rest der Liste:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">car</code> '(1 2 3 4 5))
+1
+<code class="prompt">></code> (<code class="keyword">cdr</code> '(1 2 3 4 5))
+(2 3 4 5)
+<code class="prompt">></code> (<code class="keyword">cdr</code> '(1)) <code class="comment">; der Rest dieser Liste ist die leere Liste</code>
+()
+</pre><p>
+</p><p class="par">
+Außerdem gibt es noch <em class="emph">Paare</em>, welche mittels <code>cons</code> erzeugt werden. Dieses verlangt genau zwei Argumente:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> paar (<code class="keyword">cons</code> "Ein" "Paar"))
+<code class="prompt">></code> paar
+("Ein" . "Paar")
+<code class="prompt">></code> (<code class="keyword">car</code> paar)
+"Ein"
+<code class="prompt">></code> (<code class="keyword">cdr</code> paar)
+"Paar"
+</pre><p>
+</p><p class="par">
+Zwischen Listen und Paaren besteht ein wichtiger Zusammenhang: Ein Paar verbindet zwei beliebige Werte. Eine Liste besteht wiederum aus geschachtelten Paaren:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">list</code> 1 2)
+(1 2)
+<code class="prompt">></code> (<code class="keyword">cons</code> 1 (<code class="keyword">cons</code> 2 '())) <code class="comment">; dieselbe Liste aus Paaren konstruiert</code>
+(1 2)
+</pre><p>
+</p><p class="par">
+Genauer ausgedrückt sind Listen Paare, dessen zweites Element wiederum eine Liste ist. Listen sind also verkettete Paare. Das letzte Element ist dabei immer die leere Liste:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">pair?</code> (<code class="keyword">list</code> 1 2))
+#t
+<code class="prompt">></code> (<code class="keyword">pair?</code> (<code class="keyword">cons</code> 1 (<code class="keyword">cons</code> 2 '())))
+#t
+</pre><p>
+</p><p class="par">
+Paare sind im Umkehrschluss jedoch nicht immer Listen:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">list?</code> (<code class="keyword">cons</code> 1 2))
+#f
+</pre><p>
+</p><p class="par">
+In den nächsten beiden Abschnitten lernen wir verschiedene Möglichkeiten kennen, mit Listen zu arbeiten.
+</p><p class="par">
+</p><h2 class="subsec">Mapping</h2><p>
+</p><p class="par">
+Beim <em class="emph">Mapping</em> wird eine Funktion auf die Elemente einer oder mehrerer Listen angewendet. Die Syntax lautet:
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">map</b> Funktion Liste<sub>1</sub> ... Liste<sub>n</sub>)</p><p>
+</p><p class="par">
+Betrachten wir zunächst den einfachsten Fall mit nur einer Liste. Hier möchten wir jedes Listenelement quadrieren:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">define</code> (quadrat x) (* x x))
+  (<code class="keyword">map</code> quadrat '(1 2 3 4 5))
+(1 4 9 16 25)
+</pre><p>
+</p><p class="par">
+Beim Mapping mit mehreren Listen müssen diese die gleiche Anzahl an Elementen aufweisen, und die Funktion muss genauso viele Argumente haben, wie es Listen gibt. Dabei gehen die Elemente der ersten Liste der Reihe nach immer als erstes Argument in die Funktion ein, die Elemente der zweiten Liste als zweites Argument, und so weiter. Das Ergebnis ist eine einzige Liste. Im folgenden Beispiel addieren wir paarweise die Elemente zweier Listen. Dazu verwenden wir eine Lambda-Funktion:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">map</code> (<code class="keyword">lambda</code> (x y) (+ x y))
+       '(1 2 3 4)
+       '(5 6 7 8))
+(6 8 10 12)
+</pre><p>
+</p><p class="par">
+Die neu entstandene Liste enthält die Ergebnisse der paarweisen Addition der Elemente beider Listen.
+</p><p class="par">
+</p><h2 class="subsec">Folding</h2><p>
+</p><p class="par">
+Beim <em class="emph">Folding</em> wird eine Funktion mit einem Startwert auf die Elemente einer Liste angewendet. Anders als beim Mapping ist das Ergebnis aber keine Liste, sondern ein Wert. Man unterscheidet zwischen <em class="emph">rechtem</em> und <em class="emph">linkem Folding</em>. Als Beispiel sei die Berechnung der Summe der Elemente der Liste <code>'(1 2 3 4 5)</code> angeführt. Mathematisch betrachtet würden die Elemente beim linken Folding wie folgt geklammert:
+</p><p class="par">
+</p><p class="mathblock">\((((1 + 2) + 3) + 4) + 5\)</p><p>
+</p><p class="par">
+Beim rechten Folding würde von rechts geklammert:
+</p><p class="par">
+</p><p class="mathblock">\(1 + (2 + (3 + (4 + 5)))\)</p><p>
+</p><p class="par">
+Die Funktion – hier die Addition – wird dann wiederholt auf die innersten beiden Elemente angewendet, bis die Liste komplett abgearbeitet ist. Damit ist auch klar, dass die Funktion über zwei Parameter verfügen muss. Bei der Addition ist das Ergebnis in beiden Fällen dasselbe. Bei Operationen, bei denen die Auswertreihenfolge eine Rolle spielt, können linkes und rechtes Folding dagegen zu unterschiedlichen Ergebnissen führen. Der Einsatz von Folding ist nicht auf mathematische Operationen beschränkt!
+</p><p class="par">
+Wir erinnern uns, dass eine Liste letztendlich aus geschachtelten Paaren besteht. Grafisch lässt sich das Folding daher als Baum darstellen (Abbildung&nbsp;1a,b,c). Nun wird klar, warum beim Folding ein Startwert angegeben werden muss: Das innerste Element ist eine leere Liste, die Funktion erwartet allerdings zwei passende Argumente.
+</p><p class="par">
+</p>
+<div class="row">
+    <div class="column">
+        <img src="./img/folding1.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:100pt;margin-top:12px">
+        <!-- <p class="caption">Abbildung 1 (a): Liste mit drei Elementen</p> -->
+        <p class="caption">Abbildung 1 (a): Liste mit drei Elementen</p>
+    </div>
+    <div class="column">
+        <img src="./img/folding2.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:100pt;">
+        <!-- <p class="caption">Abbildung 1 (b): Rechtes Folding</p> -->
+        <p class="caption">Abbildung 1 (b): Rechtes Folding</p>
+    </div>
+    <div class="column">
+        <img src="./img/folding3.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:100pt;">
+        <!-- <p class="caption">Abbildung 1 (c): Linkes Folding</p> -->
+        <p class="caption">Abbildung 1 (c): Linkes Folding</p>
+    </div>
+</div>
+<p>
+</p><p class="par">
+Die Syntax beim Folding ähnelt der beim Mapping. Zusätzlich wird der Startwert angeben. Es folgt die Syntax für linkes Folding (beim rechten Folding wird entsprechend <code>fold-right</code> verwendet):
+</p><p class="par">
+</p><p class="syntaxbox">(<b class="textbf">fold-left</b> Funktion Startwert Liste<sub>1</sub> ... Liste<sub>n</sub>)</p><p>
+</p><p class="par">
+Mit der folgenden Anweisung bilden wir die Listensumme. Als Startwert geben wir <code>0</code> als das neutrale Element der Addition an. Zuerst müssen wir die <code>rnrs</code>-Bibliothek laden:
+</p><p class="par">
+</p><pre>
+<code class="prompt">></code> (<code class="keyword">require</code> rnrs)
+<code class="prompt">></code> (<code class="keyword">fold-left</code> (<code class="keyword">lambda</code> (x y) (+ x y)) 0 '(1 2 3 4))
+10
+</pre><p>
+</p><p class="par">
+Beim Folding <em class="emph">einer</em> Liste muss die Funktion zwei Argumente haben. Für jede <em class="emph">weitere</em> Liste muss die Funktion genau wie beim Mapping ein zusätzliches Argument aufnehmen können.
+</p><p class="par">
+</p><p class="par">
+Damit endet unsere Einführung in Scheme. Im nächsten Kapitel lernen wir die Racket-Grafikbibliothek kennen.
+</p><p class="par">
+</p><h1 class="sec">Bilderzeugung</h1><p>
+</p><p class="par">
+Wie versprochen schauen wir uns jetzt eine Grafikbibliothek an, mit welcher wir geometrische Objekte erzeugen können. Dabei werden wir zwar keine neuen Sprachelemente kennenlernen, betrachten aber ein Anwendungsgebiet, für welches sich besonders funktionale Programmiersprachen sehr gut eignen. Schließlich lassen sich geometrische Figuren durch Funktionen beschreiben.
+</p><p class="par">
+Bei der verwendeten Bibliothek handelt es sich eigentlich um eine Racket-Bibliothek. Auch wenn Racket und Scheme miteinander nicht direkt kompatibel sind, können wir diese Bibliothek trotzdem nutzen, da sie mehrere Lisp-Dialekte unterstützt. Dem Racket-Interpreter muss lediglich mitgeteilt werden, dass er im Scheme-Modus arbeiten soll. Das haben wir bereits mittels <code>#lang scheme</code> erledigt [FF, <em class="textit">The Racket Guide: 23. Dialects of Racket and Scheme</em>].
+</p><p class="par">
+Zunächst sehen wir, wie man mathematische Funktionsgraphen plotten kann. Anschließend nutzen wir Rekursion, um geometrische Gebilde zu erzeugen.
+</p><p class="par">
+</p><h2 class="subsec">Funktionsgraphen</h2><p>
+</p><p class="par">
+Als Erstes wollen wir eine elliptische Kurve plotten. Diese Kurven kommen beispielsweise in der Kryptographie bei asymmetrischen Verschlüsselungsverfahren zum Einsatz. Sie haben die Form \(y^2 = x^3 + ax + b\) mit \(x,y \in \mathbb{R}\) und sind leicht an ihrem symmetrischen Aussehen zu erkennen [SPS11, S.&nbsp;136].
+</p><p class="par">
+Eine naive Implementierung der Kurve \({y^2 = x^3 - 2x + 2}\) könnte etwa so aussehen:
+</p><p class="par">
+</p><pre>
+(<code class="keyword">require</code> plot)
+
+<code class="comment">;; Elliptische Kurve: y^2 = x^3 - 2x + 2</code>
+(<code class="keyword">define</code> (elliptic x) (<code class="keyword">sqrt</code> (+ (<code class="keyword">expt</code> x 3) (* -2 x) 2)))
+
+(plot (function elliptic -3 3))                  <code class="comment">; Funktionsgraphen plotten</code>
+(plot-file (function elliptic -3 3) "kurve.svg") <code class="comment">; SVG-Datei erzeugen</code>
+</pre><p>
+</p><p class="par">
+Zuerst wird das <code>plot</code>-Modul geladen. Zur Berechnung der Funktionswerte der elliptischen Kurve wird die Funktion <code>elliptic</code> definiert. Mit <code>plot</code> wird der Funktionsgraph dann direkt im Interpreterfenster dargestellt. Dabei wird <code>elliptic</code> als das erste Argument an <code>function</code> übergeben, gefolgt von zwei Werten, die den Bereich der \(x\)-Achse festlegen, der dargestellt werden soll. Von <code>function</code> wird ein <em class="emph">Renderer</em>-Objekt zurückgegeben, das dann wiederum von <code>plot</code> verarbeitet wird. Es können auch noch weitere Optionen zum Formatieren der Ausgabe angegeben werden. Mit <code>plot-file</code> kann zudem eine Vektorgrafik erzeugt werden [FF, <em class="textit">Plot: Graph Plotting</em>]. Das Ergebnis zeigt Abbildung&nbsp;2a.
+</p>
+<div class="row">
+    <div class="column">
+        <img src="./img/kurve.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:225pt;">
+        <p class="caption">Abbildung 2 (a): Unvollständige elliptische Kurve.</p>
+    </div>
+    <div class="column">
+        <img src="./img/kurve2.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:225pt;">
+        <p class="caption">Abbildung 2 (b): Elliptische Kurve \(y^2 = x^3 - 2x + 2\)</p>
+    </div>
+</div>
+<p>
+</p><p class="par">
+Offensichtlich ist unsere Implementierung fehlerhaft. Das Ergebnis erinnert nicht an eine elliptische Kurve. Wir haben nicht bedacht, dass beim Umformen der Gleichung gilt:
+\begin{alignat*}{2}
+&                       & y^2     & = x^3 - 2x + 2 \\ 
+& \Leftrightarrow \quad & y_{1,2} & = \pm\sqrt{x^3 - 2x + 2}
+\end{alignat*}
+</p><p class="par">
+Somit bildet die Funktion jeden \(x\)-Wert auf <em class="emph">zwei</em> Funktionswerte ab: einen positiven und einen negativen \(y\)-Wert. (Daher handelt es sich streng genommen um keine Funktion, sondern um eine Relation.) Das können wir erreichen, indem wir den Graphen spiegeln. Hierbei genügt die einmalige Angabe des Wertebereichs:
+</p><p class="par">
+</p><pre>
+(plot (<code class="keyword">list</code> (function elliptic -3 3)
+            (function (<code class="keyword">lambda</code> (x) (- (elliptic x))))))
+</pre><p>
+</p><p class="par">
+An <code>plot</code> kann eine Liste von Funktionen übergeben werden, welche dann alle im selben Koordinatensystem dargestellt werden. Hier geben wir eine Lambda-Funktion an, die die Funktionswerte von <code>elliptic</code> mit negativem Vorzeichen zurückgibt. Damit ist unsere elliptische Kurve vollständig, wie in Abbildung 2b zu sehen ist. (Die Kurve hat genau eine Nullstelle. Die Lücke der Kurve beim \(x\)-Achsendurchgang ist vermutlich auf einen Darstellungsfehler oder auf Ungenauigkeiten bei der Berechnung der Kurvenpunkte zurückzuführen.)
+</p><p class="par">
+</p><h2 class="subsec">Geometrische Objekte</h2><p>
+</p><p class="par">
+Als Nächstes werden wir eine geometrische Figur durch Rekursion erzeugen. Das <code>image</code>-Modul stellt Funktionen bereit, um einfache Formen wie Kreise oder Rechtecke zu zeichnen und anzuordnen. Die Figur soll so aussehen, wie in Abbildung 3 dargestellt.
+</p><p class="par">
+</p><p><img src="./img/kreise.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:200pt;"></p><p class="caption">Abbildung 3: Eine rekursiv erzeugte Figur.</p>
+<p>
+</p><p class="par">
+In der imperativen Programmierung würde man die Kreise eventuell mithilfe einer Schleife erzeugen. Hier verwenden wir Rekursion:
+</p><p class="par">
+</p><pre>
+<code class="codenumbers"> 1</code>(<code class="keyword">require</code> 2htdp/image)
+<code class="codenumbers"> 2</code>
+<code class="codenumbers"> 3</code><code class="comment">;; Kreis mit Radius r</code>
+<code class="codenumbers"> 4</code>(<code class="keyword">define</code> (kreis r) (circle r "outline" "black"))
+<code class="codenumbers"> 5</code>
+<code class="codenumbers"> 6</code><code class="comment">;; Rekursionstiefe n, Startradius r</code>
+<code class="codenumbers"> 7</code>(<code class="keyword">define</code> (kreise n r)
+<code class="codenumbers"> 8</code>    (<code class="keyword">cond</code> ((= n 0) (kreis r))
+<code class="codenumbers"> 9</code>          (<code class="keyword">else</code> (beside (kreis r)
+<code class="codenumbers">10</code>                        (kreise (- n 1) (* r 0.7))))))
+<code class="codenumbers">11</code>
+<code class="codenumbers">12</code>(freeze (kreise 7 50))                      <code class="comment">; Ausgabe im Interpreter</code>
+<code class="codenumbers">13</code>(save-svg-image (kreise 7 50) "kreise.svg") <code class="comment">; Vektorgrafik</code>
+</pre><p>
+</p><p class="par">
+Zuerst definieren wir die Funktion <code>kreis</code>, um einen einzelnen Kreis zu zeichnen. Das passiert mit der <code>circle</code>-Funktion, welcher der Radius und Hinweise zur Darstellung übergeben werden. Die Funktion <code>kreise</code> erhält neben dem Startradius einen Anfangswert für den Rekursionstiefenzähler. Auf diese Weise lässt sich die Anzahl der zu zeichnenden Kreise variabel anpassen. Mit <code>beside</code> können mehrere Grafikobjekte nebeneinander positioniert werden. Die Reihenfolge der Argumente bestimmt die Reihenfolge der Anordnung. Es wird immer ein einzelner Kreis erstellt (Zeile 9), gefolgt vom rekursiven Funktionsaufruf. Dabei wird der Zähler dekrementiert und der Radius des nächsten Kreises um den Faktor&nbsp;<code>0.7</code> skaliert. Im allerletzten rekursiven Aufruf (<code>= n 0</code>) wird der letzte Kreis gezeichnet. Mit <code>freeze</code> wird das gesamte Gebilde als Bitmap im Interpreter ausgegeben oder alternativ mit <code>save-svg-image</code> in eine Vektorgrafik überführt.
+</p><p class="par">
+Spätestens im nächsten Beispiel wird klar, warum man in vielen Fällen ohne Rekursion nicht ans Ziel kommt.
+</p><p class="par">
+</p><h2 class="subsec">Fraktale</h2><p>
+</p><p class="par">
+Die nächste Figur wird etwas komplizierter. Das in Abbildung 4 gezeigte Fraktal ist ein <em class="emph">exakt selbstähnliches</em> Gebilde. Das bedeutet, dass beim Hineinzoomen in das Bild immer wieder dieselbe Struktur zu erkennen ist. Fraktale werden meist durch rekursive Verfahren generiert [Wik20].
+</p><p class="par">
+</p><p><img src="./img/fraktal.svg" class="image" alt="Abbildung konnte nicht geladen werden!" style="width:250pt;"></p><p class="caption">Abbildung 4: Ein Fraktal mit exakter Selbstähnlichkeit.</p>
+<p>
+</p><p class="par">
+Glücklicherweise haben wir bereits gute Vorarbeit geleistet. Die nachfolgende Implementierung ist weitestgehend mit dem Programm aus Abschnitt&nbsp;4.2 identisch. Lediglich der <code>else</code>-Teil ab Zeile 7 unterscheidet sich:
+</p><p class="par">
+</p><pre>
+<code class="codenumbers"> 1</code>(<code class="keyword">require</code> 2htdp/image)
+<code class="codenumbers"> 2</code>
+<code class="codenumbers"> 3</code>(<code class="keyword">define</code> (kreis r) (circle r "solid" "black"))
+<code class="codenumbers"> 4</code>
+<code class="codenumbers"> 5</code>(<code class="keyword">define</code> (fraktal n r)
+<code class="codenumbers"> 6</code>    (<code class="keyword">cond</code> ((= n 0) (kreis r))
+<code class="codenumbers"> 7</code>          (<code class="keyword">else</code> (<code class="keyword">define</code> fractus (fraktal (- n 1) (* r 0.4)))
+<code class="codenumbers"> 8</code>                (above fractus                           <code class="comment">; oben</code>
+<code class="codenumbers"> 9</code>                       (beside (rotate 90 fractus)       <code class="comment">; links</code>
+<code class="codenumbers">10</code>                               (kreis r)                 <code class="comment">; Zentrum</code>
+<code class="codenumbers">11</code>                               (rotate -90 fractus)))))) <code class="comment">; rechts</code>
+<code class="codenumbers">12</code>
+<code class="codenumbers">13</code>(freeze (fraktal 7 100))
+</pre><p>
+</p><p class="par">
+Vom großen Kreis in der Mitte abgesehen, hat jeder weitere Kreis genau drei kleinere „Satelliten“. Dieses Muster wiederholt sich dann. Um diese Satelliten zu erzeugen, wird also letztendlich die Funktion <code>fraktal</code> rekursiv aufgerufen. Um Redundanz zu vermeiden und den Code übersichtlicher zu gestalten, wurde dafür eine Hilfsfunktion <code>fractus</code> definiert. Mit <code>above</code> und <code>beside</code> werden die Satelliten um den gerade aktuellen zentralen Kreis (Zeile&nbsp;10) herum angeordnet. Dabei müssen zwei von ihnen mittels <code>rotate</code> um \(90^{\circ}\) gedreht werden.
+</p><p class="par">
+Was noch fehlt, ist der Ableger unterhalb des zentralen Hauptkreises, denn dieser bietet Platz für vier Satelliten. Schlimm ist das zwar nicht, kann aber durch folgende Anweisung erledigt werden:
+</p><p class="par">
+</p><pre>
+(freeze (above (fraktal 7 100) (rotate 180 (fraktal 6 40))))
+</pre><p>
+</p><p class="par">
+Dazu wird einfach ein zweites kleineres Fraktal um \(180^{\circ}\) gedreht und unter die Hauptfigur gesetzt. Dabei müssen Rekursionstiefe und Radius entsprechend angepasst werden. Der Faktor, um den die Satelliten verkleinert werden (<code>0.4</code>), ist übrigens bewusst gewählt. Wählt man diesen zu groß (bspw. <code>0.5</code>), liegen die Kreise nicht mehr direkt aneinander. Diese Lücken entstehen, weil ein Ableger (mit all seinen eigenen Ablegern) dann breiter werden kann als der Kreis, an dem er hängt. Das Problem lässt sich zwar lösen, aber nicht mit den hier vorgestellten primitiven Funktionen <code>above</code> und <code>beside</code>.
+</p><p class="par">
+Damit endet auch der praktische Teil unserer Einführung in Scheme.
+</p><p class="par">
+</p><h1 class="sec">Zusammenfassung</h1><p>
+</p><p class="par">
+Nun haben wir die Grundlagen von Scheme erlernt und sind in der Lage, einfache Programme selbst zu schreiben. Wir haben uns an die vielen runden Klammern gewöhnt und einen Eindruck von anderen (wesentlicheren) Unterschieden zwischen Scheme und Haskell gewonnen. Außerdem haben wir die Racket-Grafikbibliothek kennengelernt. Dabei haben wir festgestellt, wie leicht es ist, mathematische und geometrische Sachverhalte mit einer funktionalen Programmiersprache abzubilden.
+</p><p class="par">
+</p><h2 class="subsecnonumber">Ausblick</h2><p>
+</p><p class="par">
+Nach dem Durcharbeiten dieser Einführung sollte es für uns kein Problem sein, uns auch die fortgeschritteneren Sprachelemente und Konzepte von Scheme anzueignen. Hier sei noch einmal auf die in Abschnitt 2.2 empfohlene Literatur verwiesen. Es ist immer vorteilhaft, mehr als nur einen Vertreter eines Programmierparadigmas zu kennen. Das versetzt uns in die Lage, bei möglichen Projekten fundierte Entscheidungen treffen zu können, wie beispielsweise die Wahl der Programmiersprache. Detailkenntnisse in jeder Sprache sind dafür nicht erforderlich. Erste Erfahrungen, wie wir sie hier gesammelt haben, sind dafür häufig schon ausreichend.
+</p>
+    <h1>Literaturverzeichnis</h1>
+    <dl>
+        <dt>[ASS96]</dt><dd>
+        Harold Abelson, Gerald Jay Sussman und Julie Sussman. <em>Structure and Interpretation of Computer Programs.</em> 2. Aufl. The MIT Press, 1996. URL: <a href="https://mitpress.mit.edu/sites/default/files/sicp/index.html">https://mitpress.mit.edu/sites/default/files/sicp/index.html</a>.
+        </dd>
+        <dt>[Dyb09]</dt><dd>
+        R. Kent Dybvig. <em>The Scheme Programming Language.</em> 4. Aufl. The MIT Press, 2009. URL: <a href="https://www.scheme.com/tspl4/">https://www.scheme.com/tspl4/</a>.
+        </dd>
+        <dt>[FF]</dt><dd>
+        Matthew Flatt und Robert Bruce Findler. <em>Racket Documentation.</em> PLT Inc. URL: <a href="https://docs.racket-lang.org/">https://docs.racket-lang.org/</a> (besucht am 29. 06. 2020).
+        </dd>
+        <dt>[FF95]</dt><dd>
+        Daniel P. Friedman und Matthias Felleisen. <em>The Little Schemer.</em> 4. Aufl. The MIT Press, 1995.
+        </dd>
+        <dt>[SCG13]</dt><dd>
+        Alex Shinn, John Cowan und Arthur A. Gleckler. <em>Scheme Reports Process.</em> 2013. URL: <a href="http://www.scheme-reports.org/">http://www.scheme-reports.org/</a> (besucht am 07. 07. 2020).
+        </dd>
+        <dt>[SPS11]</dt><dd>
+        Stephan Spitz, Michael Pramateftakis und Joachim Swoboda. <em>Kryptographie und IT-Sicherheit. Grundlagen und Anwendungen.</em> 2. Aufl. Wiesbaden: Springer, 2011.
+        </dd>
+        <dt>[Tio20]</dt><dd>
+        Tiobe. <em>TIOBE programming community index.</em> TIOBE Software BV. Juni 2020. URL: <a href="https://www.tiobe.com/tiobe-index/">https://www.tiobe.com/tiobe-index/</a> (besucht am 24. 06. 2020).
+        </dd>
+        <dt>[Wik20]</dt><dd>
+        Wikipedia. <em>Fractal.</em> 2. Juli 2020. URL: <a href="https://en.wikipedia.org/w/index.php?title=Fractal&oldid=965564663">https://en.wikipedia.org/w/index.php?title=Fractal&oldid=965564663</a> (besucht am 04. 07. 2020).
+        </dd>
+    </dl>
+</div>
+<br><br>
+</body>
+</html>
